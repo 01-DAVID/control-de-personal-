@@ -1,0 +1,63 @@
+MANUAL DE USO - ADMINISTRADORES
+
+Objetivo:
+Este manual explica cómo los administradores deben utilizar las funciones y métodos disponibles del sistema para gestionar usuarios, personal, reportes, perfiles y control de accesos.
+
+1. Iniciar sesión como administrador
+- Ingresar al sistema con credenciales de administrador.
+- Después de iniciar sesión, acceder al panel administrativo.
+- Confirmar que tiene permisos para gestionar usuarios, perfiles, reportes y movimientos.
+
+2. Gestionar personal
+- Entrar a la sección de personal para consultar el listado completo.
+- Utilizar filtros para buscar por nombre, documento o estado.
+- Revisar el personal activo e inactivo según corresponda.
+- Identificar personas que actualmente tienen un ingreso abierto y las que ya cerraron su salida.
+
+3. Crear y administrar perfiles
+- Acceder a la opción de perfiles.
+- Crear nuevos perfiles según los roles del sistema.
+- Asignar permisos y categorías de acuerdo con las funciones que deberá realizar cada usuario.
+- Verificar que los perfiles queden correctamente configurados antes de asignarlos.
+
+4. Crear y actualizar usuarios
+- Crear nuevos usuarios desde la sección correspondiente.
+- Ingresar la información personal necesaria, incluyendo documento, nombre, rol y datos de contacto.
+- Si aplica, adjuntar la foto del usuario.
+- Actualizar datos cuando haya cambios en la información personal.
+- Verificar que el usuario quede registrado correctamente en el sistema.
+
+5. Consultar información de usuarios
+- Buscar un usuario por documento o datos básicos.
+- Revisar su estado, su historial de ingresos y salidas y cualquier observación registrada.
+- Usar esta información para validar solicitudes o resolver incidencias.
+
+6. Gestionar equipos
+- Crear equipos o asociarlos a los usuarios cuando sea necesario.
+- Registrar la salida de un equipo cuando corresponda.
+- Revisar que la salida del equipo quede correctamente registrada en el sistema.
+
+7. Registrar observaciones de movimientos
+- Revisar los movimientos registrados.
+- Agregar observaciones cuando sea necesario para explicar una salida, incidencia o situación especial.
+- Mantener un historial claro y útil para futuras consultas.
+
+8. Generar reportes
+- Entrar a la sección de reportes para revisar ingresos y salidas.
+- Filtrar información por fechas, tipo de movimiento o estado.
+- Descargar reportes en formato Excel cuando se necesite compartir, respaldar o analizar datos.
+- Revisar que los reportes contengan información completa y actualizada.
+
+9. Supervisar ingresos y salidas
+- Consultar el estado de las personas que se encuentran dentro del establecimiento.
+- Confirmar coberturas y detectar situaciones que requieran intervención.
+- Coordinar con los vigilantes cuando se presenten inconsistencias.
+
+10. Buenas prácticas del administrador
+- Mantener la información del sistema actualizada.
+- Revisar periódicamente los registros para detectar errores o inconsistencias.
+- Responder de forma rápida a problemas de acceso o datos incompletos.
+- Proteger la información confidencial y garantizar el correcto uso del sistema.
+
+Conclusión:
+El administrador debe usar las funciones del sistema de manera ordenada y responsable, asegurando que los usuarios, perfiles, reportes y movimientos queden correctamente gestionados.

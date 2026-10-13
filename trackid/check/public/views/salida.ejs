@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/salida.css">
+    <title>Salida de usuarios</title>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" aria-label="Menu lateral">
+            <button id="btnCerrarSesion" type="button" class="sidebar-btn">Cerrar sesion</button>
+            <a href="/registro" class="sidebar-btn sidebar-link">Registro y verificacion</a>
+            <a href="/reporte" id="r-salida" class="sidebar-btn sidebar-link">Reportes</a>
+        </aside>
+
+        <main class="card">
+            <h1>Salida de usuarios</h1>
+            <p>Consulta por cedula o nombre, revisa la informacion y registra la salida cuando corresponda.</p>
+
+            <form id="salidaForm" novalidate>
+                <section class="scan-panel" aria-label="Panel de escaneo">
+                    <div class="field">
+                        <div>
+                            <label for="codigoCarnet">Cedula o nombre</label>
+                            <label class="scaner" for="scanid">Scaner</label>
+                        </div>
+                        <div class="scan-row">
+                            <input id="codigoCarnet" name="codigoCarnet" type="text" autocomplete="off" placeholder="Escribe la cedula o el nombre" required>
+                            <button type="button" id="btnProcesar" class="btn-primary">Consultar</button>
+                            <input id="scanid" name="scanid" type="text" autocomplete="off" placeholder="Escanea el carnet o documento">
+                            <!-- <button type="button" id="btnProcesar" class="btn-primary">Consultar</button> -->
+                            <button type="button" id="btnSalida" class="btn-primary" disabled>Salida</button>
+                            <button type="button" id="btnLimpiar" class="btn-secondary">Limpiar</button>
+                        </div>
+                        <small class="field-note">Presiona Enter o usa Consultar para cargar los datos.</small>
+                    </div>
+
+                    <div class="scan-status" aria-label="Estado de escaneo">
+                        <span id="estadoScan" class="pill pill-wait">Esperando escaneo</span>
+                        <span id="horaActual" class="pill pill-muted">--:--</span>
+                    </div>
+                </section>
+
+                <section class="grid" aria-label="Informacion del usuario">
+                    <div class="field">
+                        <label for="nombre">Nombre completo</label>
+                        <input id="nombre" name="nombre" type="text" placeholder="Nombre del usuario" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="tipoDocumento">Tipo de documento</label>
+                        <input id="tipoDocumento" name="tipoDocumento" type="text" placeholder="Tipo de documento" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="numeroDocumento">Numero de documento</label>
+                        <input id="numeroDocumento" name="numeroDocumento" type="text" placeholder="Numero de documento" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="correo">Correo electronico</label>
+                        <input id="correo" name="correo" type="email" placeholder="Correo" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="telefono">Telefono</label>
+                        <input id="telefono" name="telefono" type="tel" placeholder="Telefono" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="rol">Rol</label>
+                        <input id="rol" name="rol" type="text" placeholder="Rol" readonly>
+                    </div>
+
+                    <div class="field field-photo">
+                        <label>Foto del usuario</label>
+                        <div id="fotoUsuario" class="capture-space" role="img" aria-label="Espacio para foto del usuario">
+                            <span>Foto</span>
+                        </div>
+                        <small class="field-note">Aqui se mostrara la foto cuando implementes el escaneo de credencial.</small>
+                    </div>
+                    <div class="salida-extra">
+                        <div class="field area-visita-field">
+                            <label for="areaVisitaSalida">Area a la que se dirigio</label>
+                            <input id="areaVisitaSalida" name="areaVisitaSalida" type="text" placeholder="Solo aplica para visitantes" readonly>
+                        </div>
+
+                        <div class="field observacion-field">
+                            <label for="observacion">Ingrese una observacion si la hay</label>
+                            <div class="contenedor-obs">
+                                <textarea name="observacion" id="observacion" placeholder="Escribe una observacion opcional..." disabled></textarea>
+                                <button type="button" id="observacion-submit" class="obs-submit" disabled>Adjuntar observacion</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="meta" aria-label="Informacion de movimiento y equipos">
+                    <article class="meta-card" aria-label="Movimiento">
+                        <h2>Movimiento</h2>
+                        <div class="meta-grid">
+                            <div class="field">
+                                <label for="horaIngreso">Hora de ingreso</label>
+                                <input id="horaIngreso" type="text" readonly>
+                            </div>
+                            <div class="field">
+                                <label for="horaSalida">Hora de salida</label>
+                                <input id="horaSalida" type="text" readonly>
+                            </div>
+                            <div class="field">
+                                <label for="duracion">Duracion</label>
+                                <input id="duracion" type="text" readonly>
+                            </div>
+                            <div class="field">
+                                <label for="estadoMovimiento">Estado</label>
+                                <input id="estadoMovimiento" type="text" readonly>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="meta-card" aria-label="Equipos">
+                        <h2>Equipos registrados</h2>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Equipo</th>
+                                        <th>Serial</th>
+                                        <th>Adicional</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="equiposBody">
+                                    <tr class="table-empty">
+                                        <td colspan="4">Sin equipos registrados.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+
+                <div id="mensaje" class="message" aria-live="polite"></div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/salida.js"></script>
+    <script src="js/scannerSalida.js"></script>
+</body>
+</html>

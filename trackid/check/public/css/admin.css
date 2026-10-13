@@ -1,0 +1,293 @@
+:root {
+    --bg-start: #f4f7fb;
+    --bg-end: #dbe7f5;
+    --card: #ffffff;
+    --text: #1d2a3a;
+    --muted: #5b6b7c;
+    --primary: #13d313;
+    --primary-hover: #3cff00;
+    --accent: #179110;
+    --accent-hover: #0b579d;
+    --border: #c8d7e6;
+    --sidebar-bg: #ffffffec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    padding: 1rem;
+}
+
+.contenedor {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+
+
+.barra-lateral {
+    min-height: 520px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-radius: 16px;
+    background: var(--sidebar-bg);
+    box-shadow: 0 18px 30px rgba(10, 30, 48, 0.2);
+}
+
+.titulo-barra::before {
+    content: "TrackID";
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.boton-lateral {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid rgba(29, 42, 58, 0.12);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    background: #111827;
+    color: #fff;
+    text-decoration: none;
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.boton-lateral:hover {
+    background: var(--primary);
+    color: #07120a;
+    transform: translateY(-1px);
+}
+
+.tarjeta,
+.contendor {
+    width: 100%;
+    min-width: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 40px rgba(12, 41, 74, 0.12);
+}
+
+.presentacion {
+    width: 100%;
+    min-width: 0;
+    background: var(--card);
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 40px rgba(12, 41, 74, 0.12);
+}
+
+.cuadro{
+    display: flex;
+    align-items:center;
+    justify-content:start;
+}
+
+.perfil-usuario {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-width: 0;
+    gap: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.perfil-usuario h1 {
+    margin: 0;
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    color: var(--text);
+}
+
+.perfil-usuario .nombre {
+    color: var(--accent);
+    font-weight: 800;
+}
+
+.foto-container {
+    position: relative;
+    width: clamp(180px, 60vw, 270px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 100px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.foto-usuario {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.foto-placeholder {
+    position: absolute;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.foto-usuario[src=""] {
+    display: none;
+}
+
+.foto-usuario:not([src=""]) + .foto-placeholder {
+    display: none;
+}
+
+.contendor {
+    grid-column: 2;
+    display: grid;
+    gap: 1rem;
+}
+
+h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+}
+
+p {
+    margin: 0;
+    color: var(--muted);
+}
+
+label {
+    font-weight: 700;
+    font-size: 0.98rem;
+}
+
+.mini-conetenedor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+button {
+    border: 0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+#otorgar-permiso {
+    background: var(--primary);
+    color: #fff;
+}
+
+#otorgar-permiso:hover {
+    background: var(--primary-hover);
+    color: #07120a;
+}
+
+#revocar-permiso {
+    background: #e9eef5;
+    color: var(--text);
+}
+
+#revocar-permiso:hover {
+    background: #dbe7f5;
+}
+
+
+
+@media (max-width: 900px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    .contenedor {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-lateral {
+        min-height: auto;
+    }
+
+    .contendor {
+        grid-column: auto;
+    }
+
+    .foto-container {
+        margin-left: 0;
+    }
+}
+
+/* ===== Movil ===== */
+@media (max-width: 600px) {
+    body {
+        padding: 0.6rem;
+    }
+
+    .tarjeta,
+    .presentacion,
+    .contendor {
+        padding: 1.1rem;
+        border-radius: 14px;
+    }
+
+    .presentacion {
+        margin-top: 1rem;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    .boton-lateral {
+        min-height: 52px;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.98rem;
+    }
+
+    .titulo-barra::before {
+        text-align: center;
+    }
+
+    .perfil-usuario {
+        gap: 1.25rem;
+        padding: 1.1rem;
+        justify-content: center;
+        text-align: center;
+    }
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/registro.css">
+    <title>Registro de Usuario</title>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" aria-label="Menu lateral">
+            <button id="btnLogout" type="button" class="sidebar-btn">Cerrar sesion</button>
+            <a href="/salida" class="sidebar-btn">Salida de usuarios</a>
+            <a href="/reporte" id="r-registro" class="sidebar-btn">Reportes</a>
+        </aside>
+
+        <main class="card">
+            <h1>Registro y verificacion de usuario</h1>
+            <p>Complete los campos para capturar la informacion y verificar al usuario.</p>
+            <section>
+                <h2>Consulta de usuario</h2>
+                <div class="contendor-doc" >
+                    <label class="c-documento" for="Docmuento">Documento o nombre</label>
+                    <div class="estilo-btn">
+                        <input class="numero-doc" id="documento" type="text" name="documento" placeholder="Documento o Nombre">
+                        <button class="btn-consultar" id="consultar-btn" type="button">Consultar</button>
+                        <input class="numero-doc" id="scannerRegistroInput" type="text" name="scannerRegistroInput" autocomplete="off" placeholder="Escanea el carnet o documento">
+                        <div class="hora-ingreso">
+                            <label for="hora"></label>
+                            <span id="horaIngreso" name="horaIngreso" class="pill pill-muted"> --:--</span>
+                        </div>
+
+                        <button type="button" class="btn-primary2" id="btn-ingresar-rapido">Ingresar usuario</button>
+                    </div>
+                </div>
+            </section>
+            <h2>Registro de usuario</h2>
+            <form id="userForm" novalidate>
+                <section class="grid">
+                    <div class="field">
+                        <label for="nombre">Nombre completo</label>
+                        <input id="nombre" name="nombre" type="text" placeholder="Ej: Maria Lopez" required >
+                    </div>
+
+                    <div class="field">
+                        <label for="tipoDocumento">Tipo de documento</label>
+                        <select id="tipoDocumento" name="tipoDocumento" required >
+                            <option value="">Selecciona una opcion</option>
+                            <option value="C.C.">Cedula de ciudadania</option>
+                            <option value="T.I.">Tarjeta de identidad</option>
+                            <option value="C.E.">Cedula de extranjeria</option>
+                            <option value="P.T.O.">Pasaporte</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="numeroDocumento">Numero de documento</label>
+                        <input id="numeroDocumento" name="numeroDocumento" type="text" inputmode="numeric" placeholder="Solo numeros" required >
+                    </div>
+
+                    <div class="field">
+                        <label for="correo">Correo electronico</label>
+                        <input id="correo" name="correo" type="email" inputmode="email" placeholder="usuario@correo.com" title="Ingresa un correo valido sin emojis." >
+                    </div>
+
+                    <div class="field">
+                        <label for="telefono">Telefono</label>
+                        <input id="telefono" name="telefono" type="tel" placeholder="Ej: 3001234567">
+                    </div>
+
+                    <div class="field">
+                        <label for="rol">Rol</label>
+                        <select id="rol" name="rol" required>
+                            <option value="">Selecciona una opcion</option>
+                            <option value="funcionario-planta">Funcionario planta</option>
+                            <option value="funcionario">Funcionario</option>
+                            <option value="aprendiz">Aprendiz</option>
+                            <option value="aprendiz-interno">Aprendiz interno</option>
+                            <option value="pasante">Pasante</option>
+                            <option value="proveedor">Proveedor</option>
+                            <option value="contratista">Contratista</option>
+                            <option value="visitante">Visitante</option>
+                            <option value="visitante-gira">Visitante de gira</option>
+                            <option value="vigilante">Vigilante</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="coordinador">Coordinador</option>
+                        </select>
+                    </div>
+
+                    <div class="field" id="campoAreaVisitante" hidden>
+                        <label for="areaVisita">Area a la que se dirige</label>
+                        <input id="areaVisita" name="areaVisita" type="text" placeholder="Ej: Coordinacion academica">
+                    </div>
+
+                    <div class="field field-photo">
+                        <label for="fotoInput">Foto del usuario</label>
+                        <div id="userPhoto" class="capture-space" aria-label="Vista previa de la foto del usuario">
+                            <span id="fotoPlaceholder">Sin foto</span>
+                            <img id="fotoPreview" alt="Foto del usuario" hidden>
+                        </div>
+                        <div class="photo-actions">
+                            <button id="btnTomarFoto" class="btn-photo-primary" type="button">Tomar foto</button>
+                            <label class="btn-photo-secondary" for="fotoInput">Cargar imagen</label>
+                        </div>
+                        <div id="cameraPanel" class="camera-panel" hidden>
+                            <video id="cameraVideo" autoplay playsinline muted></video>
+                            <div class="photo-actions">
+                                <button id="btnCapturarFoto" class="btn-photo-primary" type="button">Capturar</button>
+                                <button id="btnCancelarCamara" class="btn-photo-secondary" type="button">Cancelar</button>
+                            </div>
+                        </div>
+                        <canvas id="fotoCanvas" hidden></canvas>
+                        <input id="fotoInput" class="foto-input" name="fotoInput" type="file" accept="image/*" capture="environment" >
+                        <small class="field-note">Puede tomar una foto o cargar una imagen.</small>
+                    </div>
+                    <!-- <div class="hora-ingreso">
+                        <label for="hora">Hora de ingreso</label>
+                        <span id="horaIngreso" name="horaIngreso" class="pill pill-muted"> --:--</span>
+                    </div> -->
+                    
+
+                    <div class="actions">
+                        <div id="msg" class="message" aria-live="polite"></div> 
+                        <div class="butons-op">
+                            <button type="submit" class="btn-primary" id="btn-ingresar">Ingresar usuario</button> 
+                            <button type="reset" class="btn-secondary">Limpiar pantalla</button>
+                            <button type="button" id="btnOpenEquipo" class="btn-terciary">Ingresar objeto</button>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- <div class="actions">
+                    <button type="submit" class="btn-primary">Verificar usuario</button>
+                    <button type="reset" class="btn-secondary">Limpiar</button>
+                    <button type="button" id="btnOpenEquipo" class="btn-terciary">Ingresar objeto</button>
+                </div> -->
+
+                <!-- <div id="msg" class="message" aria-live="polite"></div> -->
+            </form>
+
+
+
+
+<!-- Modal de Ingresar el equipo  -->
+
+            <section id="modalBg" class="modal-overlay" hidden></section>
+            <section id="equipoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="equipoTitle" hidden>
+                <header class="modal-header">
+                    <h2 id="equipoTitle">Registrar equipo</h2>
+                    <button type="button" id="btnCloseModal" class="btn-icon" aria-label="Cerrar">×</button>
+                </header>
+
+                <form id="equipoForm" class="modal-body" novalidate>
+                    <div class="field">
+                        <label for="cantidadEquipos">¿Cuántos equipos registrará?</label>
+                        <input id="cantidadEquipos" type="number" value="1" min="1" max="10" class="input-cantidad">
+                        <small class="field-note">Selecciona la cantidad para generar los campos.</small>
+                    </div>
+
+                    <hr>
+
+                    <!-- Contenedor donde aparecerán los campos dinámicos -->
+                    <div id="equiposDinamicosContainer"></div>
+
+                    <footer class="modal-actions">
+                        <button type="submit" class="btn-primary">Guardar equipo</button>
+                        <button type="button" id="btnCancelModal" class="btn-cancelar">Cancelar</button>
+                    </footer>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="js/registro.js"></script>
+    <script src="../js/registro-consultar.js"></script>
+    <script src="js/scannerRegistro.js"></script>
+</body>
+</html>

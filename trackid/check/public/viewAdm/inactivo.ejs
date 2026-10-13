@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/inactivo.css">
+    <title>Salida de personal activo</title>
+</head>
+<body>
+    <div class="contenedor">
+        <aside class="barra-lateral" aria-label="Menu lateral">
+            <h2 class="titulo-barra"></h2>
+            <button id="cerrar-sesion" type="button" class="boton-lateral">Cerrar sesion</button>
+            <a href="/admin" class="boton-lateral">Administrador</a>
+            <a href="/perfiles" class="boton-lateral"> Crear perfiles</a>
+            <a href="/personal" class="boton-lateral">Informes </a>
+            <a href="/personal_activo" class="boton-lateral">Actualizar Datos</a>
+        </aside>
+
+        <main class="tarjeta">
+            <h1>Dar salida al personal </h1>
+            <p>Consulta una persona en sede, revisa sus equipos u objetos y registra el motivo antes de dar salida.</p>
+
+            <form id="form-filtros-inactivo" class="contenedor-filtros" novalidate>
+                <section class="fila-filtros">
+                    <div class="field">
+                        <label for="filtro-nombre-inactivo">Nombre</label>
+                        <input id="filtro-nombre-inactivo" name="nombre" type="text" placeholder="Ej: Maria Lopez">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-cedula-inactivo">Cedula</label>
+                        <input id="filtro-cedula-inactivo" name="cedula" type="text" inputmode="numeric" placeholder="Ej: 10203040">
+                    </div>
+
+                    <div class="actions">
+                        <button id="btn-buscar-inactivo" type="submit" class="btn-primary">Buscar activos</button>
+                        <button id="btn-limpiar-inactivo" type="reset" class="btn-secondary">Limpiar</button>
+                    </div>
+                </section>
+
+                <div id="mensaje-inactivo" class="message" aria-live="polite"></div>
+            </form>
+
+            <section class="contenedor-tabla" aria-label="Tabla de personal activo">
+                <table class="tabla" id="tabla-inactivo">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Cedula</th>
+                            <th>Rol</th>
+                            <th>Ingreso</th>
+                            <th>Estado</th>
+                            <th class="celda-acciones">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-inactivo"></tbody>
+                </table>
+            </section>
+
+            <section class="contenedor-filtros" aria-label="Detalle de salida">
+                <h2>Detalle para salida</h2>
+
+                <div class="fila-filtros">
+                    <div class="field">
+                        <label for="detalle-nombre">Nombre</label>
+                        <input id="detalle-nombre" type="text" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="detalle-documento">Cedula</label>
+                        <input id="detalle-documento" type="text" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="detalle-rol">Rol</label>
+                        <input id="detalle-rol" type="text" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="detalle-ingreso">Ingreso</label>
+                        <input id="detalle-ingreso" type="text" readonly>
+                    </div>
+                </div>
+
+                <section class="contenedor-tabla" aria-label="Equipos u objetos asociados">
+                    <table class="tabla">
+                        <thead>
+                            <tr>
+                                <th>Equipo u objeto</th>
+                                <th>Serial</th>
+                                <th>Adicional</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo-tabla-equipos">
+                            <tr>
+                                <td colspan="4">Selecciona un usuario activo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <div class="field">
+                    <label for="observacion-salida">Observacion de salida</label>
+                    <textarea id="observacion-salida" rows="4" placeholder="Escribe el motivo de la salida"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button id="btn-adjuntar-observacion" type="button" class="btn-secondary" disabled>Adjuntar observacion</button>
+                    <button id="btn-dar-salida" type="button" class="btn-primary" disabled>Dar salida</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/inactivo.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/activo.css">
+    <title>Actualizar Personal</title>
+</head>
+<body>
+    <div class="contenedor">
+        <aside class="barra-lateral" aria-label="Menu lateral">
+            <h2 class="titulo-barra"></h2>
+            <button id="cerrar-sesion" type="button" class="boton-lateral">Cerrar sesion</button>
+            <a href="/admin" class="boton-lateral">Administrador</a>
+            <a href="/perfiles" class="boton-lateral"> Crear perfiles</a>
+            <a href="/personal" class="boton-lateral">Informes </a>
+            <a href="/personal_inactivo" class="boton-lateral">Dar salida</a>
+        </aside>
+
+        <main class="tarjeta">
+            <header class="encabezado-vista">
+                <div>
+                    <h1>Actualizar Personal</h1>
+                    <p>Consulta cualquier persona registrada, selecciona un registro y actualiza sus datos personales.</p>
+                </div>
+                <span id="estado-seleccion" class="pill pill-muted">Sin seleccion</span>
+            </header>
+
+            <form id="form-filtros-activo" class="contenedor-filtros" novalidate>
+                <section class="fila-filtros">
+                    <div class="field">
+                        <label for="filtro-nombre-activo">Nombre</label>
+                        <input id="filtro-nombre-activo" name="nombre" type="text" placeholder="Ej: Maria Lopez">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-cedula-activo">Cedula</label>
+                        <input id="filtro-cedula-activo" name="cedula" type="text" inputmode="numeric" placeholder="Ej: 10203040">
+                    </div>
+
+
+                    <div class="actions">
+                        <button id="btn-buscar-activo" type="submit" class="btn-primary">Buscar</button>
+                        <button id="btn-limpiar-activo" type="reset" class="btn-secondary">Limpiar</button>
+                    </div>
+                </section>
+
+                <div id="mensaje-activo" class="message" aria-live="polite"></div>
+            </form>
+
+            <section class="contenedor-tabla" aria-label="Tabla de personal registrado">
+                <table class="tabla" id="tabla-activo">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Cedula</th>
+                            <th>Correo</th>
+                            <th>Telefono</th>
+                            <th>Rol</th>
+                            <th>Ingreso</th>
+                            <th>Estado</th>
+                            <th class="celda-acciones">Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-activo"></tbody>
+                </table>
+            </section>
+
+            <section class="panel-edicion" aria-label="Formulario para actualizar datos">
+                <div class="panel-edicion__titulo">
+                    <h2>Datos para actualizar</h2>
+                    <p>El formulario se habilita cuando eliges una persona de la tabla.</p>
+                </div>
+
+                <form id="form-actualizar-activo" class="form-edicion" novalidate>
+                    <input id="documento-actual-activo" name="documentoActual" type="hidden">
+
+                    <section class="fila-filtros">
+                        <div class="field">
+                            <label for="editar-nombre-activo">Nombre completo</label>
+                            <input id="editar-nombre-activo" name="nombre" type="text" placeholder="Ej: Maria Lopez" required disabled>
+                        </div>
+
+                        <div class="field">
+                            <label for="editar-tipo-activo">Tipo de documento</label>
+                            <select id="editar-tipo-activo" name="tipoDocumento" required disabled>
+                                <option value="">Selecciona una opcion</option>
+                                <option value="C.C.">Cedula de ciudadania</option>
+                                <option value="T.I.">Tarjeta de identidad</option>
+                                <option value="C.E.">Cedula de extranjeria</option>
+                                <option value="P.T.O.">Pasaporte</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="editar-documento-activo">Numero de documento</label>
+                            <input id="editar-documento-activo" name="numeroDocumento" type="text" inputmode="numeric" placeholder="Solo numeros" required disabled>
+                        </div>
+
+                        <div class="field">
+                            <label for="editar-correo-activo">Correo electronico</label>
+                            <input id="editar-correo-activo" name="correo" type="email" placeholder="usuario@correo.com" disabled>
+                        </div>
+
+                        <div class="field">
+                            <label for="editar-telefono-activo">Telefono</label>
+                            <input id="editar-telefono-activo" name="telefono" type="tel" placeholder="Ej: 3001234567" disabled>
+                        </div>
+
+                        <div class="field">
+                            <label for="editar-rol-activo">Rol</label>
+                            <select id="editar-rol-activo" name="rol" required disabled>
+                                <option value="">Selecciona una opcion</option>
+                                <option value="funcionario-planta">Funcionario planta</option>
+                                <option value="funcionario">Funcionario</option>
+                                <option value="aprendiz">Aprendiz</option>
+                                <option value="aprendiz-interno">Aprendiz interno</option>
+                                <option value="pasante">Pasante</option>
+                                <option value="proveedor">Proveedor</option>
+                                <option value="contratista">Contratista</option>
+                                <option value="visitante">Visitante</option>
+                                <option value="visitante-gira">Visitante de gira</option>
+                                <option value="vigilante">Vigilante</option>
+                            </select>
+                        </div>
+                    </section>
+
+                    <div class="actions">
+                        <button id="btn-guardar-activo" type="submit" class="btn-primary" disabled>Guardar cambios</button>
+                        <button id="btn-cancelar-edicion-activo" type="button" class="btn-secondary" disabled>Cancelar edicion</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/activo.js"></script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+:root {
+    --bg-start: #f4f7fb;
+    --bg-end: #dbe7f5;
+    --card: #ffffff;
+    --text: #1d2a3a;
+    --muted: #5b6b7c;
+    --primary: #39a900;
+    --primary-hover: #2f8e00;
+    --accent: #0f6abf;
+    --border: #c8d7e6;
+    --surface: #f7faff;
+    --error: #b42318;
+    --ok: #067647;
+    --sidebar-bg: #ffffffec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 1rem;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+}
+
+.layout {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.sidebar {
+    background: var(--sidebar-bg);
+    color: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: 0 18px 30px rgba(10, 30, 48, 0.2);
+}
+
+.sidebar-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.sidebar-btn {
+    height: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+    padding: 0.7rem 0.85rem;
+    background: rgba(0, 0, 0, 0.938);
+    color: #fff;
+    text-decoration: dashed;
+    text-align: initial;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.sidebar-btn:hover {
+    background: var(--primary);
+    color: #07120a;
+    transform: translateY(-1px);
+}
+
+.panel {
+    min-width: 0;
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 20px 40px rgba(12, 41, 74, 0.12);
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.etiqueta {
+    margin: 0 0 0.25rem;
+    color: var(--accent);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+}
+
+h1 {
+    margin: 0 0 0.45rem;
+    font-size: clamp(1.5rem, 2.5vw, 2.15rem);
+}
+
+.descripcion {
+    margin: 0;
+    color: var(--muted);
+}
+
+.filtros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    align-items: end;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+label {
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+input,
+select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0.68rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent);
+    outline: 3px solid rgba(15, 106, 191, 0.18);
+}
+
+.acciones {
+    display: flex;
+    gap: 0.65rem;
+}
+
+button {
+    min-height: 42px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn-primary,
+.btn-reporte {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-reporte:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: #e9eef5;
+    color: var(--text);
+}
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 0.85rem;
+}
+
+.dato {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.dato span {
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.dato strong {
+    font-size: 1.55rem;
+}
+
+.estado-consulta {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.barra-avance {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e9eef5;
+}
+
+.barra-avance span {
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--primary);
+    transition: width 0.25s ease;
+}
+
+.mensaje {
+    min-height: 1.2rem;
+    margin: 0;
+    font-weight: 800;
+}
+
+.mensaje.ok {
+    color: var(--ok);
+}
+
+.mensaje.error {
+    color: var(--error);
+}
+
+.mensaje.wait {
+    color: var(--muted);
+}
+
+.contenedor-tabla {
+    width: 100%;
+    max-height: 520px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.tabla {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+    padding: 0.82rem 0.9rem;
+    border-bottom: 1px solid rgba(200, 215, 230, 0.7);
+    text-align: left;
+    vertical-align: top;
+    font-size: 0.94rem;
+}
+
+.tabla th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 900;
+}
+
+.tabla tbody tr:hover td {
+    background: #fbfdff;
+}
+
+.estado {
+    display: inline-flex;
+    min-width: 74px;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.25rem 0.55rem;
+    font-weight: 800;
+    font-size: 0.82rem;
+}
+
+.estado.activo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.estado.cerrado {
+    background: #e9eef5;
+    color: #334155;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        min-height: auto;
+    }
+
+    .sidebar-btn {
+        height: auto;
+        min-height: 52px;
+        text-align: center;
+        font-size: 0.98rem;
+    }
+
+    .encabezado {
+        flex-direction: column;
+    }
+
+    .btn-reporte {
+        width: 100%;
+    }
+
+    .resumen {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ===== Movil ===== */
+@media (max-width: 600px) {
+    body {
+        padding: 0.6rem;
+    }
+
+    .panel {
+        padding: 1.1rem;
+        border-radius: 14px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    input,
+    select {
+        font-size: 16px;
+    }
+
+    .filtros {
+        padding: 0.85rem;
+    }
+
+    .acciones {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .acciones button {
+        width: 100%;
+    }
+
+    .dato strong {
+        font-size: 1.25rem;
+    }
+
+    .contenedor-tabla {
+        max-height: 65vh;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla th,
+    .tabla td {
+        padding: 0.55rem 0.6rem;
+        font-size: 0.88rem;
+    }
+}

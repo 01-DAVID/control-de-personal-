@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/adminPersonal.css">
+    <title>Personal </title>
+</head>
+<body>
+    <div class="contenedor">
+        <aside class="barra-lateral" aria-label="Menu lateral">
+            <h2 class="titulo-barra"></h2>
+            <button id="cerrar-sesion" type="button" class="boton-lateral">Cerrar sesion</button>
+            <a href="/admin" class="boton-lateral">Administrador</a>
+            <a href="/perfiles" class="boton-lateral"> Crear perfiles</a>
+            <a href="/personal_activo" class="boton-lateral">Actualizar Datos</a>
+            <a href="/personal_inactivo" class="boton-lateral">Dar salida</a>
+
+        </aside>
+
+        <main class="tarjeta">
+            <h1>Generar informes </h1>
+            <p>Consulta todas las personas registradas. Filtra por nombre, cedula, dia, mes u hora de ingreso/salida.</p>
+
+            <form id="form-filtros-personal" class="contenedor-filtros" novalidate>
+                <section class="fila-filtros">
+                    <div class="field">
+                        <label for="filtro-nombre-personal">Nombre</label>
+                        <input id="filtro-nombre-personal" name="nombre" type="text" placeholder="Ej: Maria Lopez">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-cedula-personal">Cedula</label>
+                        <input id="filtro-cedula-personal" name="cedula" type="text" inputmode="numeric" placeholder="Ej: 10203040">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-rol-personal">Rol</label>
+                        <select id="filtro-rol-personal" name="rol">
+                            <option value="">Todos los roles</option>
+                            <option value="funcionario-planta">Funcionario planta</option>
+                            <option value="funcionario">Funcionario</option>
+                            <option value="aprendiz">Aprendiz</option>
+                            <option value="aprendiz-interno">Aprendiz interno</option>
+                            <option value="pasante">Pasante</option>
+                            <option value="proveedor">Proveedor</option>
+                            <option value="contratista">Contratista</option>
+                            <option value="visitante">Visitante</option>
+                            <option value="visitante-gira">Visitante de gira</option>
+                            <option value="vigilante">Vigilante</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-dia-personal">Dia</label>
+                        <input id="filtro-dia-personal" name="dia" type="date">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-mes-personal">Mes</label>
+                        <input id="filtro-mes-personal" name="mes" type="month">
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-quincena-personal">Quincena</label>
+                        <select id="filtro-quincena-personal" name="quincena">
+                            <option value="">Todas</option>
+                            <option value="primera">Primera quincena</option>
+                            <option value="segunda">Segunda quincena</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="filtro-hora-personal">Hora</label>
+                        <input id="filtro-hora-personal" name="hora" type="time">
+                    </div>
+
+                    <div class="actions">
+                        <button id="btn-buscar-personal" type="submit" class="btn-primary">Buscar</button>
+                        <button id="btn-limpiar-personal" type="reset" class="btn-secondary">Limpiar</button>
+                    </div>
+                </section>
+
+                <div id="mensaje-personal" class="message" aria-live="polite"></div>
+            </form>
+
+            <section class="contenedor-tabla" aria-label="Tabla de personal registrado">
+                <table class="tabla" id="tabla-personal">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Cedula</th>
+                            <th>Correo</th>
+                            <th>Telefono</th>
+                            <th>Rol</th>
+                            <th>Creado</th>
+                            <th>Ultimo ingreso</th>
+                            <th>Ultima salida</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-personal"></tbody>
+                </table>
+            </section>
+        </main>
+        <aside class="barra-inferior">
+            <button class="btn-informe" id="generar-informe">Generar informe</button>
+        </aside>
+    </div>
+
+    <script src="/js/personal.js"></script>
+    <script  src="../js/adminReporte.js"></script>
+</body>
+</html>

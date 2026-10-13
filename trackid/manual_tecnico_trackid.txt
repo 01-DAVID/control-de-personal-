@@ -1,0 +1,640 @@
+MANUAL TÉCNICO
+TRACKID / SenaCheck - Sistema de control de acceso
+
+Versión del documento: 1.0
+Fecha de elaboración: 27 de julio de 2026
+Código fuente analizado: directorio check/
+Versión declarada de la aplicación: 1.0.0
+
+======================================================================
+1. PROPÓSITO, ALCANCE Y ADVERTENCIA DE CUMPLIMIENTO
+======================================================================
+
+Este manual describe la arquitectura, instalación, operación técnica,
+persistencia de datos, interfaces y controles de seguridad del proyecto
+TrackID / SenaCheck. También relaciona los requisitos colombianos aplicables
+al tratamiento de información personal y las acciones necesarias antes de
+usar la aplicación en un ambiente real.
+
+El sistema registra ingresos y salidas de personas, datos de contacto,
+fotografías, equipos asociados y perfiles internos de acceso. Por ello trata
+datos personales y no debe publicarse ni usarse en producción como si ya
+estuviera certificado o plenamente conforme a la normativa. Las brechas
+indicadas en la sección 9 deben cerrarse y validarse por el responsable de
+tratamiento de datos y, cuando corresponda, por las áreas jurídica,
+seguridad de la información y gestión documental de la organización.
+
+Alcance técnico analizado:
+- Aplicación web Node.js ubicada en check/.
+- Base de datos MySQL definida en check/sql/.
+- Vistas EJS, JavaScript, CSS y archivos estáticos.
+- Roles de acceso: administrador y vigilante.
+
+Fuera de alcance:
+- Infraestructura física de portería o dispositivos lectores.
+- Configuración real de servidores, certificados, copias de seguridad y
+  credenciales; no se exponen valores del archivo .env.
+- Validación jurídica particular de la entidad que despliegue el sistema.
+
+
+======================================================================
+2. DESCRIPCIÓN FUNCIONAL
+======================================================================
+
+TrackID / SenaCheck es una aplicación web de control de acceso. Sus funciones
+actuales son:
+
+1. Autenticar administradores y vigilantes mediante código y contraseña.
+2. Crear perfiles internos de acceso.
+3. Registrar o actualizar personas por tipo y número de documento.
+4. Registrar un ingreso abierto y cerrar la salida de una persona.
+5. Consultar personas mediante documento, nombre o valor de escáner.
+6. Asociar equipos a una persona y retirarlos de la lista activa.
+7. Consultar personal en sede, personal que ya salió e historial de
+   movimientos.
+8. Generar reportes en pantalla y archivos Microsoft Excel (.xlsx).
+9. Guardar fotografías de perfiles y de personas registradas.
+
+El nombre del paquete es "senacheck"; los reportes identifican el producto
+como "TrackID". Este manual conserva ambos nombres para que el equipo pueda
+reconocerlos en el código y en la interfaz.
+
+
+======================================================================
+3. ARQUITECTURA DEL SISTEMA
+======================================================================
+
+3.1. Tecnologías
+
+- Backend: Node.js y Express 5.
+- Motor de vistas: EJS.
+- Base de datos: MySQL, mediante mysql2/promise.
+- Autenticación: JSON Web Token (JWT) en cookie HTTP-only.
+- Hash de contraseñas: bcryptjs.
+- Reportes: ExcelJS.
+- Carga de configuración: dotenv.
+- Interfaz: HTML/EJS, JavaScript y CSS estáticos.
+
+3.2. Diagrama lógico
+
+  Navegador
+      |
+      | HTML, CSS, JavaScript, formularios y solicitudes fetch
+      v
+  Express / server.js
+      |
+      +-- Rutas de vistas EJS
+      +-- Rutas de autenticación
+      +-- API JSON /api
+      |
+      v
+  Controladores
+      |
+      v
+  Modelos de negocio y acceso a datos
+      |
+      v
+  Pool mysql2 --------------> MySQL / base senacheck
+      |
+      +---------------------> Sistema de archivos: public/imagenes/personal/
+
+3.3. Estructura de directorios
+
+check/
+├── server.js                         Punto de arranque Express.
+├── package.json                      Dependencias y comandos npm.
+├── .env.example                      Plantilla de configuración.
+├── database/
+│   └── conexion.js                   Pool de conexiones MySQL.
+├── middlewares/
+│   ├── validartoken.js               Lectura y validación de JWT.
+│   └── anticache.js                  Cabeceras contra caché del navegador.
+├── routes/
+│   ├── admin_router.js               Agrupa rutas.
+│   ├── login_router.js               Login y logout.
+│   ├── api_routes/router_api.js      Endpoints JSON.
+│   └── navegarouter/routernavegar.js Vistas EJS.
+├── controlador/                      Validación y lógica de cada caso de uso.
+├── modelo/                           Consultas y comandos SQL.
+├── public/
+│   ├── views/                        Vistas de login, registro, salida y reporte.
+│   ├── viewAdm/                      Vistas administrativas.
+│   ├── js/                           Lógica del cliente y escáner.
+│   ├── css/                          Estilos.
+│   └── imagenes/personal/            Fotografías almacenadas por rol.
+└── sql/
+    ├── senacheck(new).sql            Esquema completo recomendado.
+    └── senacheck.sql                 Esquema alterno/de desarrollo.
+
+3.4. Capas y responsabilidades
+
+- server.js: carga variables de entorno, registra middlewares, archivos
+  estáticos, vistas EJS, rutas y manejador global de errores.
+- routes/: define las URLs y conecta cada solicitud con un controlador.
+- controlador/: valida entradas, formatea datos, gestiona archivos,
+  genera Excel y decide respuestas HTTP.
+- modelo/: ejecuta consultas SQL parametrizadas y encapsula la persistencia.
+- database/conexion.js: crea el pool de conexiones a MySQL.
+- public/: entrega las páginas y los recursos del navegador.
+
+
+======================================================================
+4. REQUISITOS E INSTALACIÓN
+======================================================================
+
+4.1. Requisitos previos
+
+- Node.js en versión LTS compatible con Express 5.
+- npm (incluido con Node.js).
+- Servidor MySQL accesible para la aplicación.
+- Usuario de MySQL con permisos limitados sobre la base senacheck.
+- Permiso de escritura para el proceso Node.js en
+  check/public/imagenes/personal/.
+- En producción: DNS, certificado TLS/HTTPS, proxy inverso y mecanismo de
+  copias de seguridad administrado.
+
+4.2. Variables de entorno
+
+Crear check/.env a partir de check/.env.example y definir, como mínimo:
+
+  PUERTO=<puerto HTTP local>
+  SECRETJWT=<secreto aleatorio, largo y exclusivo por ambiente>
+  DB_HOST=<host de MySQL>
+  DB_PORT=<puerto de MySQL>
+  DB_USER=<usuario de base de datos no privilegiado>
+  DB_PASSWORD=<contraseña segura>
+  DB_NAME=senacheck
+
+Reglas obligatorias de configuración:
+
+- Nunca publicar ni enviar el archivo .env.
+- No usar el valor de respaldo dev_secret_cambia_esto definido en el código.
+- No usar root como DB_USER en un servidor real.
+- Cambiar SECRETJWT en caso de sospecha de exposición; ello invalida las
+  sesiones existentes.
+- Conservar secretos en un administrador de secretos o en variables seguras
+  del entorno de despliegue, no en el repositorio.
+
+4.3. Inicialización
+
+1. Abrir una terminal dentro de check/.
+2. Instalar las dependencias declaradas: npm install.
+3. Crear la base de datos importando el esquema
+   sql/senacheck(new).sql desde un cliente MySQL o MySQL Workbench.
+4. Configurar las variables de entorno descritas en el punto 4.2.
+5. Iniciar la aplicación con npm start.
+6. Para desarrollo con reinicio automático, usar npm run dev.
+7. Abrir http://localhost:<PUERTO>.
+
+El archivo modelo/usuario_modelo.js puede añadir la columna foto_ruta a la
+tabla usuarios si no existe. Aun así, debe preferirse el esquema actualizado
+senacheck(new).sql y controlar los cambios de estructura mediante migraciones
+versionadas en lugar de depender de alteraciones automáticas en producción.
+
+4.4. Cuenta de demostración
+
+El archivo sql/senacheck.sql contiene una referencia a una cuenta de ejemplo
+"admin" con contraseña "1234". Esa cuenta y cualquier hash asociado son solo
+para desarrollo local. Deben eliminarse o sustituirse antes de desplegar el
+sistema, y las primeras credenciales deben entregarse por un canal seguro.
+
+
+======================================================================
+5. MODELO DE DATOS
+======================================================================
+
+5.1. Entidades principales
+
+Tabla: usuarios
+Propósito: identifica a la persona cuyo ingreso o salida se controla.
+Datos: id, nombre, tipo_documento, numero_documento, correo, telefono, rol,
+area_visita, foto_ruta, created_at y updated_at.
+Restricción principal: numero_documento es único.
+
+Tabla: movimientos
+Propósito: conserva cada ingreso y salida.
+Datos: id, usuario_id, ingreso_at, salida_at, estado y observacion_salida.
+Estados: en_sede y salio.
+
+Tabla: equipos
+Propósito: relaciona equipos con la persona en el momento en que están
+activos.
+Datos: id, usuario_id, nombre_equipo, serial_equipo, adicional_equipo y
+created_at.
+
+Tabla: accesos
+Propósito: credenciales internas para entrar a la aplicación.
+Datos: id, codigo, password_hash, rol, activo, foto_ruta y created_at.
+Restricción principal: codigo es único.
+
+5.2. Relaciones
+
+  usuarios (1) -------- (N) movimientos
+      |
+      +--------------- (N) equipos
+
+  accesos es una entidad independiente de usuarios. Contiene las cuentas de
+  quienes operan el sistema, no las personas registradas para ingresar a la
+  sede.
+
+5.3. Consideraciones de integridad
+
+- El registro usa consultas parametrizadas, reduciendo el riesgo de
+  inyección SQL.
+- Para crear un ingreso, movimiento_modelo.js toma un bloqueo asesorado de
+  MySQL y una transacción para evitar que la misma persona tenga dos
+  movimientos abiertos por concurrencia.
+- La salida se registra cuando salida_at está en NULL y luego cambia el estado
+  a salio.
+- El retiro de un equipo ejecuta DELETE sobre la tabla equipos. Por tanto, no
+  deja historial de la salida del equipo; esta limitación debe corregirse si
+  se requiere trazabilidad o valor probatorio.
+- No existe una tabla de auditoría que indique qué cuenta creó, actualizó,
+  consultó, exportó o eliminó datos. Debe incorporarse antes de producción.
+
+
+======================================================================
+6. FLUJOS TÉCNICOS PRINCIPALES
+======================================================================
+
+6.1. Inicio de sesión
+
+1. POST /login recibe codigo y contrasena.
+2. login_control.js consulta la tabla accesos.
+3. bcryptjs compara la contraseña con password_hash.
+4. Si el acceso está activo y la contraseña es válida, se firma un JWT con
+   id, código y rol. La vigencia actual es de un día.
+5. El token se guarda en la cookie token con httpOnly y sameSite=lax.
+6. El rol "administrador" redirige a /admin; los demás roles redirigen a
+   /registro.
+
+6.2. Registro de ingreso
+
+1. El operador diligencia los datos de la persona o la consulta mediante
+   documento, nombre o valor del escáner.
+2. POST /api/usuarios valida campos básicos, número de documento, nombre,
+   rol y hora de ingreso.
+3. Si existe un usuario con cambios de datos, la aplicación solicita
+   confirmación de actualización.
+4. Si se adjunta una foto JPG, PNG o WEBP de hasta 4 MB, se guarda en
+   public/imagenes/personal/<rol>/.
+5. Se crea o actualiza el registro usuarios.
+6. garantizarMovimiento crea un movimiento en_sede solo si no hay otro
+   movimiento abierto para esa persona.
+
+6.3. Registro de salida
+
+1. El operador consulta a la persona y sus equipos.
+2. POST /api/salida valida el documento y busca un movimiento abierto.
+3. cerrarMovimiento asigna la hora actual del servidor a salida_at, cambia
+   estado a salio y guarda una observación opcional.
+4. GET/POST relacionados permiten consultar o administrar los equipos
+   asociados.
+
+6.4. Reportes
+
+- Los modelos filtran por nombre, documento, rol, estado, día, mes, rango,
+  quincena y hora.
+- ExcelJS genera reportes de personal y de ingresos en formato .xlsx.
+- Los reportes incluyen datos identificables y movimientos; su exportación
+  debe estar restringida a roles autorizados y quedar auditada.
+
+6.5. Escáner
+
+- GET /api/scanner-registro/buscar?valor=... consulta una persona para
+  registro.
+- GET /api/scanner-salida/buscar?valor=... consulta persona, equipos y
+  movimiento para salida.
+- El valor debe tener al menos tres caracteres. El código actual no integra
+  un protocolo específico de hardware: trata el valor recibido como texto.
+
+
+======================================================================
+7. INTERFACES Y ENDPOINTS
+======================================================================
+
+La siguiente tabla describe el estado observado en el código. "Token" indica
+que el middleware validartokenApi exige una cookie JWT válida. Actualmente no
+hay middleware de autorización por rol para los endpoints protegidos.
+
+Método   Ruta                                      Token   Descripción
+------   ----------------------------------------  ------  -----------------------------
+POST     /login                                    No      Autentica y crea la sesión.
+GET      /logout                                   No      Elimina la cookie de sesión.
+GET      /api/health                               No      Verifica conexión con MySQL.
+GET      /api/ingresos                             No      Lista ingresos y salidas.
+GET      /api/ingresos/reporte-excel               No      Descarga Excel de ingresos.
+GET      /api/auth/me                              Sí      Devuelve la cuenta autenticada.
+GET      /api/personal                             Sí      Lista personas registradas.
+GET      /api/personal/reporte-excel               Sí      Descarga Excel detallado.
+GET      /api/personal/activos                     Sí      Lista ingresos abiertos.
+GET      /api/personal/inactivos                   Sí      Lista últimos movimientos cerrados.
+POST     /api/perfiles                             Sí      Crea una cuenta interna.
+POST     /api/usuarios                             Sí      Registra/actualiza e ingresa persona.
+GET      /api/usuarios/buscar?valor=               Sí      Busca por nombre o documento.
+GET      /api/usuarios/:numeroDocumento            Sí      Consulta persona, equipos y movimiento.
+PUT      /api/usuarios/:numeroDocumento            Sí      Actualiza datos de persona.
+GET      /api/scanner-registro/buscar?valor=       Sí      Consulta para registro por escáner.
+GET      /api/scanner-salida/buscar?valor=         Sí      Consulta para salida por escáner.
+POST     /api/equipos                              Sí      Crea equipo asociado a persona.
+DELETE   /api/equipos/:equipoId/salida             Sí      Elimina equipo activo.
+PUT      /api/movimientos/:movimientoId/observacion Sí     Agrega observación.
+POST     /api/salida                               Sí      Cierra movimiento abierto.
+
+Vistas principales:
+
+- /: login.
+- /registro: registro de ingreso.
+- /salida: registro de salida.
+- /reporte: reportes de portería.
+- /admin: panel administrativo.
+- /personal, /personal_activo y /personal_inactivo: consultas administrativas.
+- /perfiles: creación de perfiles.
+
+Advertencia: /reporte no tiene protección de token en la ruta de vistas y los
+endpoints de ingresos también son públicos. Esta configuración es inadecuada
+para datos personales y debe modificarse conforme a la sección 9.
+
+
+======================================================================
+8. CONTROLES EXISTENTES Y OPERACIÓN SEGURA
+======================================================================
+
+8.1. Controles implementados
+
+- Contraseñas almacenadas como hash bcrypt.
+- Consultas SQL parametrizadas en los modelos revisados.
+- JWT en cookie HTTP-only con duración de un día.
+- Validación de presencia, documento, nombre y tipos/tamaño declarados para
+  imágenes.
+- Límite de JSON de 5 MB y límite de carga multipart de 6 MB.
+- Cabeceras no-store/no-cache para reducir almacenamiento de respuestas en
+  caché del navegador.
+- Transacción y bloqueo de MySQL al abrir un movimiento.
+
+8.2. Operación segura mínima
+
+- Ejecutar siempre detrás de HTTPS. Configurar las cookies de producción con
+  secure=true y definir dominios y orígenes permitidos.
+- Mantener Node.js y las dependencias actualizadas; revisar vulnerabilidades
+  antes de cada despliegue.
+- Usar cuentas MySQL separadas por ambiente y con el menor privilegio posible.
+- Cifrar las copias de seguridad y probar periódicamente su restauración.
+- Registrar sin exponer datos personales en logs de aplicación, proxy o
+  monitoreo.
+- Revocar de inmediato cuentas, sesiones y secretos comprometidos.
+- Restringir el acceso físico y administrativo al servidor y a los respaldos.
+
+
+======================================================================
+9. NORMATIVA COLOMBIANA Y MATRIZ DE CUMPLIMIENTO
+======================================================================
+
+9.1. Normas y criterios aplicables
+
+1. Constitución Política, artículo 15: protege el hábeas data, intimidad y
+   buen nombre.
+
+2. Ley Estatutaria 1581 de 2012 - Protección de datos personales.
+   Aplicable al tratamiento de datos personales por entidades públicas o
+   privadas. Exige principios de finalidad, libertad, veracidad, transparencia,
+   acceso restringido, seguridad y confidencialidad; además reconoce derechos
+   de conocimiento, actualización, rectificación y supresión.
+   Fuente oficial:
+   https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981
+
+3. Decreto Único 1074 de 2015, capítulos 25 y 26, y Decreto 090 de 2018.
+   Reglamentan aspectos de protección de datos y el Registro Nacional de Bases
+   de Datos (RNBD).
+   Fuente oficial:
+   https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=76608
+
+4. Superintendencia de Industria y Comercio (SIC) - RNBD y responsabilidad
+   demostrada. Las personas jurídicas de naturaleza pública deben registrar
+   sus bases de datos en el RNBD. Otras organizaciones deben determinar si
+   están obligadas según su naturaleza y activos; la no obligación de registro
+   no elimina las demás obligaciones de la Ley 1581.
+   Fuentes oficiales:
+   https://www.sic.gov.co/registro-nacional-de-bases-de-datos
+   https://sedeelectronica.sic.gov.co/publicaciones/boletin-juridico/concepto/cuales-personas-estan-obligadas-realizar-el-registro-de-bases-de-datos-personales-en-el-rnbd
+
+5. Ley 1273 de 2009 - Protección de la información y de los datos.
+   Refuerza la necesidad de prevenir acceso abusivo, daño, interceptación,
+   uso no autorizado y otras conductas contra sistemas y datos.
+   Fuente oficial:
+   https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=34492
+
+6. Ley 527 de 1999 - Mensajes de datos. Es relevante si los registros de
+   ingreso/salida o reportes serán usados como evidencia. Requiere asegurar
+   accesibilidad posterior, integridad, identificación del origen y fecha/hora
+   para conservar valor probatorio.
+   Fuente oficial:
+   https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4276
+
+7. Aplicación condicionada a entidades públicas o privadas con función
+   pública: Ley 594 de 2000 y normativa de gestión documental. Los registros
+   no pueden eliminarse solo por conveniencia técnica: la conservación,
+   transferencia y disposición final deben seguir las Tablas de Retención
+   Documental (TRD) y el Programa de Gestión Documental aplicable.
+   Fuente oficial:
+   https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4275
+
+8. Aplicación condicionada a una entidad pública o a una sede electrónica:
+   Ley 1712 de 2014 y Resolución MinTIC 1519 de 2020. La publicación de
+   información debe respetar accesibilidad web, seguridad digital y la reserva
+   de datos personales. La transparencia no autoriza publicar documentos,
+   fotografías o movimientos identificables sin fundamento legal.
+   Fuentes oficiales:
+   https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?18=&i=56882
+   https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=171926
+
+9.2. Datos tratados por la aplicación
+
+Categoría                    Datos observados                         Tratamiento
+---------------------------  ---------------------------------------  ------------------------------
+Identificación               Nombre, tipo y número de documento      Registro, consulta y reportes.
+Contacto                     Correo y teléfono                        Registro, consulta y reportes.
+Control de acceso            Fechas, horas, estado, observaciones     Ingreso, salida y reportes.
+Ubicación/relación           Área de visita y rol                     Control de acceso.
+Bienes asociados             Equipo, serial y datos adicionales       Control de equipos.
+Imagen                       Fotografía y ruta de archivo             Identificación visual.
+Credenciales internas        Código, hash, rol y estado               Autenticación de operadores.
+
+Una fotografía es un dato personal. Si se usa o se procesa para identificar
+de manera única a la persona mediante una característica biométrica, debe
+tratarse como dato sensible. En ese caso se requiere una evaluación jurídica
+reforzada, finalidad específica, medidas reforzadas de seguridad y, cuando
+no exista excepción legal, autorización previa, expresa e informada. Si el
+sistema registra aprendices menores de edad, debe aplicar la protección
+especial de niños, niñas y adolescentes prevista por la Ley 1581 y validar
+la base jurídica y representación que corresponda.
+
+9.3. Obligaciones que deben materializarse
+
+- Definir por escrito el Responsable del Tratamiento, los Encargados y las
+  finalidades concretas: control de acceso, seguridad, administración de
+  equipos y generación de reportes.
+- Publicar una Política de Tratamiento de Datos Personales y un Aviso de
+  Privacidad visible antes de recolectar datos.
+- Conservar evidencia consultable de la autorización del titular cuando la
+  ley la exija, o documentar la excepción legal aplicable.
+- Habilitar un canal y procedimiento para consultas, actualización,
+  rectificación, supresión, revocatoria y reclamos dentro de los términos
+  legales.
+- Aplicar minimización: no solicitar ni exportar campos que no sean necesarios
+  para la finalidad declarada.
+- Establecer un calendario de retención y eliminación segura. Para entidades
+  públicas, alinearlo con las TRD y gestión documental institucional.
+- Controlar el acceso por función, capacitar a operadores y suscribir deberes
+  de confidencialidad.
+- Gestionar incidentes de seguridad, conservar evidencia y evaluar los avisos
+  que correspondan a titulares, responsables y SIC.
+- Registrar/actualizar la base en RNBD cuando el Responsable esté obligado.
+
+
+======================================================================
+10. BRECHAS DETECTADAS Y ACCIONES OBLIGATORIAS ANTES DE PRODUCCIÓN
+======================================================================
+
+Prioridad crítica
+
+1. Restringir datos y reportes públicos.
+   Situación: GET /api/ingresos, GET /api/ingresos/reporte-excel y la vista
+   /reporte se publican antes del middleware de JWT. Exponen nombres,
+   documentos, roles, área y movimientos.
+   Acción: protegerlos con autenticación y autorización por rol; aplicar
+   mínimo privilegio y registrar las exportaciones.
+
+2. Proteger fotografías.
+   Situación: Express publica todo public/ y las fotografías se guardan bajo
+   public/imagenes/personal/. Las URL pueden ser accesibles sin validación de
+   identidad.
+   Acción: guardar fotografías fuera del directorio estático o servirlas
+   mediante una ruta autenticada que compruebe permisos. Evitar nombres de
+   archivo predecibles y mantener evidencia de la autorización aplicable.
+
+3. Implementar autorización por rol en el servidor.
+   Situación: todos los endpoints posteriores al JWT aceptan cualquier token;
+   un vigilante puede crear perfiles, consultar personal y exportar reportes.
+   Acción: crear middleware requireRole y aplicar permisos por operación.
+   Solo administradores deben gestionar perfiles, usuarios, exportaciones y
+   consultas masivas, salvo política institucional distinta y documentada.
+
+4. Completar gobierno de datos personales.
+   Situación: no se encontraron aviso de privacidad, autorización, política
+   visible ni endpoint/proceso para derechos de los titulares.
+   Acción: implementar los documentos, formularios, canales y evidencias
+   definidos en la sección 9 antes de capturar datos reales.
+
+5. Incorporar trazabilidad y retención.
+   Situación: no hay log de auditoría ni historial de equipos retirados; un
+   DELETE elimina información de equipos.
+   Acción: crear una tabla de auditoría inmutable o con controles de
+   integridad, con actor, fecha/hora, IP/origen, operación, objeto y resultado.
+   Reemplazar la eliminación de equipos por un evento de salida con fecha y
+   operador. Definir retención y disposición final.
+
+Prioridad alta
+
+6. Fortalecer sesión y despliegue.
+   Situación: existe un secreto JWT de respaldo y la cookie no define secure.
+   CORS se habilita sin lista explícita de orígenes.
+   Acción: eliminar el secreto de respaldo en producción, usar HTTPS,
+   secure=true, restricciones de dominio/origen, rotación de secretos,
+   expiración coherente y protección CSRF según la arquitectura elegida.
+
+7. Endurecer las cargas de imágenes.
+   Situación: se valida MIME declarado, extensión y tamaño, pero no la firma
+   real del archivo ni un análisis antimalware.
+   Acción: validar magic bytes, recodificar imágenes en servidor, generar
+   nombres aleatorios, limitar dimensiones, escanear archivos y separar el
+   almacenamiento de datos públicos.
+
+8. Aplicar controles de aplicación y red.
+   Acción: incluir cabeceras de seguridad, rate limiting en login y búsquedas,
+   protección contra fuerza bruta, monitoreo de errores, cifrado en tránsito
+   entre componentes y control de privilegios de MySQL.
+
+9. Gestionar respaldos y recuperación.
+   Acción: hacer copias cifradas de la base y archivos, definir responsables,
+   frecuencia, retención, ubicación, control de acceso y pruebas de
+   restauración. Las copias están sujetas a las mismas reglas de privacidad.
+
+10. Preparar pruebas automatizadas.
+    Situación: package.json no define una suite de pruebas; npm test termina
+    con un error intencional.
+    Acción: agregar pruebas de autenticación, roles, control de acceso,
+    validación de entradas, concurrencia de movimientos, exportación, carga
+    de archivos y derechos de titulares.
+
+
+======================================================================
+11. PLAN DE MANTENIMIENTO
+======================================================================
+
+Diariamente
+- Revisar errores de servidor, espacio disponible, estado de respaldos y
+  accesos anómalos sin registrar datos personales completos en los logs.
+- Verificar que las cuentas de operadores activos correspondan al personal
+  autorizado.
+
+Mensualmente
+- Revisar permisos por rol, cuentas inactivas, exportaciones y eventos de
+  auditoría.
+- Aplicar actualizaciones de seguridad de Node.js, npm y sistema operativo
+  después de probarlas en un ambiente no productivo.
+- Probar una restauración de respaldo de base de datos y fotografías.
+- Verificar política, avisos, inventario de bases y estado del RNBD cuando
+  aplique.
+
+Ante un incidente
+- Aislar el componente afectado y revocar tokens, claves o cuentas expuestas.
+- Preservar registros técnicos y evidencia sin alterarlos.
+- Identificar datos, titulares, sistemas y periodo comprometidos.
+- Activar el procedimiento institucional de respuesta a incidentes y cumplir
+  los deberes de reporte o comunicación que determine la normativa aplicable.
+- Documentar causa, impacto, medidas correctivas y verificación de cierre.
+
+
+======================================================================
+12. LISTA DE VERIFICACIÓN DE SALIDA A PRODUCCIÓN
+======================================================================
+
+[ ] .env no está versionado ni expuesto.
+[ ] SECRETJWT es aleatorio, exclusivo y no usa valores de desarrollo.
+[ ] La cuenta y contraseña de demostración fueron eliminadas o reemplazadas.
+[ ] Todo el tráfico usa HTTPS y las cookies usan secure=true.
+[ ] No existen rutas públicas que devuelvan datos personales o fotografías.
+[ ] Los roles se validan en el backend para cada operación sensible.
+[ ] Las fotografías se almacenan fuera de recursos públicos o se protegen
+    con autorización de servidor.
+[ ] Existe Política de Tratamiento, Aviso de Privacidad y evidencia de
+    autorización o de la excepción legal aplicable.
+[ ] Existe procedimiento de derechos de titulares e incidente de seguridad.
+[ ] Se evaluó/realizó el RNBD según la calidad del Responsable.
+[ ] Se definió retención, copias de seguridad y restauración.
+[ ] Se implementó auditoría de operaciones y exportaciones.
+[ ] Se corrigió la eliminación de equipos para conservar su trazabilidad.
+[ ] Se aprobaron pruebas funcionales, de seguridad y de restauración.
+[ ] Las áreas jurídica, seguridad, datos personales y archivo aprobaron el
+    uso institucional, cuando sean aplicables.
+
+
+======================================================================
+13. REFERENCIAS DEL CÓDIGO
+======================================================================
+
+- check/server.js: configuración del servidor y middlewares.
+- check/routes/api_routes/router_api.js: catálogo de endpoints y protección
+  de token actual.
+- check/routes/navegarouter/routernavegar.js: rutas de vistas.
+- check/controlador/api_control.js: flujos de usuarios, reportes, imágenes,
+  equipos y movimientos.
+- check/controlador/login_control.js: autenticación y creación de JWT.
+- check/middlewares/validartoken.js: validación de sesiones.
+- check/modelo/usuario_modelo.js: usuarios y reportes.
+- check/modelo/movimiento_modelo.js: integridad de ingresos y salidas.
+- check/modelo/equipo_modelo.js: equipos asociados.
+- check/sql/senacheck(new).sql: esquema de datos actualizado.
+
+Fin del manual técnico.

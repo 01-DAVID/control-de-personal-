@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>🔗 </title>
+</head>
+<body>
+    <div id="contenedor">
+        <form id="modulo" method="POST" action="/login">
+            <div id="sena2">
+                <h1 id="sena">
+                    <h1 id="sena3">TRACKER ID</h1>
+                </h1>
+            </div>
+            <div class="inputBox">
+                <input name="codigo" type="text" autocomplete="username" required>
+                <label for=""> Usuario</label>
+            </div>
+            <div class="inputBox">
+                <input name="contrasena" type="password"  autocomplete="current-password" required>
+            <label for="">Contraseña</label>
+            </div>
+            <p id="loginError" style="color:#b91c1c; margin: 8px 0 0;" hidden></p>
+            <button id="inicio" type="submit"><h1>Ingresar</h1></button>
+        </form>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

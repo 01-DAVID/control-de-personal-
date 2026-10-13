@@ -1,0 +1,54 @@
+MANUAL DE USO - VIGILANTES
+
+Objetivo:
+Este manual explica cómo los vigilantes deben registrar ingresos, registrar salidas y generar informes en el sistema de control de acceso.
+
+1. Iniciar sesión
+- Ingresar al sistema con el usuario y la contraseña asignados.
+- Verificar que la pantalla principal muestre las opciones de registro, salida y reportes.
+- Si el usuario tiene permisos de vigilante, podrá acceder a las funciones de control de ingreso y salida.
+
+2. Registrar ingreso de una persona
+- Dirigirse a la opción de registro.
+- Buscar al usuario por documento, nombre o código de escaneo.
+- Verificar que los datos mostrados correspondan a la persona que ingresa.
+- Confirmar el registro del ingreso.
+- Si aplica, registrar los equipos o datos adicionales solicitados por el sistema.
+- Asegurarse de que el ingreso quede correctamente guardado antes de continuar.
+
+3. Registrar salida de una persona
+- Entrar a la opción de salida.
+- Buscar la persona que va a salir.
+- Revisar que exista un ingreso activo registrado.
+- Confirmar la salida y, si es necesario, agregar una observación.
+- Verificar que el sistema marque la salida correctamente.
+- No registrar una salida si no existe un ingreso activo, porque el sistema lo rechaza.
+
+4. Usar el escáner cuando esté disponible
+- Si el sistema cuenta con lectura por escáner, ingresar el código o valor detectado.
+- Esperar que el sistema encuentre al usuario asociado.
+- Revisar la información antes de confirmar la acción.
+- En caso de encontrar varios resultados, informar al administrador para validar la identidad.
+
+5. Generar informes
+- Acceder a la sección de reportes.
+- Seleccionar el rango de fechas o el tipo de información que se desea consultar.
+- Revisar los resultados mostrados en pantalla.
+- Si se requiere, exportar el reporte en formato de Excel para compartir o guardar respaldo.
+- Verificar que la información sea correcta antes de entregarla.
+
+6. Recomendaciones importantes
+- Registrar siempre los datos con cuidado para evitar errores.
+- Confirmar que la persona está autorizada antes de permitir el ingreso o la salida.
+- Reportar cualquier problema técnico al administrador del sistema.
+- Mantener la confidencialidad de la información registrada.
+
+7. Errores frecuentes
+- Intentar registrar salida sin un ingreso activo.
+- Ingresar datos incompletos o incorrectos.
+- No revisar el resultado del escaneo antes de confirmar.
+- Olvidar agregar observaciones cuando el sistema lo solicite.
+
+Conclusión:
+El vigilante debe usar el sistema de forma ordenada, verificando cada registro, registrando salidas correctamente y generando informes con datos confiables.
+                                                            

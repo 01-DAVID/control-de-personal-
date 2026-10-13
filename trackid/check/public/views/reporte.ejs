@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/reporte.css">
+    <title>Reporte de ingresos</title>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" aria-label="Menu lateral">
+            <button id="cerrar-sesion" type="button" class="sidebar-btn">Cerrar sesion</button>
+            <a href="/registro" class="sidebar-btn sidebar-link">Registro y verificacion</a>
+            <a href="/salida" class="sidebar-btn sidebar-link">Salida de usuarios</a>
+        </aside>
+
+        <main class="panel">
+            <header class="encabezado">
+                <div>
+                    <p class="etiqueta">Reportes de porteria</p>
+                    <h1>Consulta de ingresos</h1>
+                    <p class="descripcion">Filtra los movimientos por cualquier dato disponible y descarga el reporte con la misma consulta.</p>
+                </div>
+                <button id="btn-reporte-excel" type="button" class="btn-reporte">Generar reporte</button>
+            </header>
+
+            <form id="form-filtros-ingresos" class="filtros" novalidate>
+                <div class="field">
+                    <label for="filtro-nombre">Nombre</label>
+                    <input id="filtro-nombre" name="nombre" type="text" placeholder="Ej: Maria Lopez">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-cedula">Cedula</label>
+                    <input id="filtro-cedula" name="cedula" type="text" inputmode="numeric" placeholder="Ej: 10203040">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-rol">Rol</label>
+                    <select id="filtro-rol" name="rol">
+                        <option value="">Todos</option>
+                        <option value="funcionario-planta">Funcionario planta</option>
+                        <option value="funcionario">Funcionario</option>
+                        <option value="aprendiz">Aprendiz</option>
+                        <option value="aprendiz-interno">Aprendiz interno</option>
+                        <option value="pasante">Pasante</option>
+                        <option value="proveedor">Proveedor</option>
+                        <option value="contratista">Contratista</option>
+                        <option value="visitante">Visitante</option>
+                        <option value="visitante-gira">Visitante de gira</option>
+                        <option value="vigilante">Vigilante</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="filtro-estado">Estado</label>
+                    <select id="filtro-estado" name="estado">
+                        <option value="">Todos</option>
+                        <option value="en_sede">En sede</option>
+                        <option value="salio">Salio</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="filtro-dia">Dia</label>
+                    <input id="filtro-dia" name="dia" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-mes">Mes</label>
+                    <input id="filtro-mes" name="mes" type="month">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-desde">Desde</label>
+                    <input id="filtro-desde" name="desde" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-hasta">Hasta</label>
+                    <input id="filtro-hasta" name="hasta" type="date">
+                </div>
+
+                <div class="field">
+                    <label for="filtro-quincena">Quincena</label>
+                    <select id="filtro-quincena" name="quincena">
+                        <option value="">Todas</option>
+                        <option value="primera">Primera quincena</option>
+                        <option value="segunda">Segunda quincena</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="filtro-hora">Hora</label>
+                    <input id="filtro-hora" name="hora" type="time">
+                </div>
+
+                <div class="acciones">
+                    <button type="submit" class="btn-primary">Consultar</button>
+                    <button type="reset" class="btn-secondary">Limpiar</button>
+                </div>
+            </form>
+
+            <section class="resumen" aria-label="Resumen de la consulta">
+                <div class="dato">
+                    <span>Total ingresos</span>
+                    <strong id="total-ingresos">0</strong>
+                </div>
+                <div class="dato">
+                    <span>En sede</span>
+                    <strong id="total-en-sede">0</strong>
+                </div>
+                <div class="dato">
+                    <span>Salidas</span>
+                    <strong id="total-salidas">0</strong>
+                </div>
+                <div class="dato">
+                    <span>Avance</span>
+                    <strong id="avance-consulta">0%</strong>
+                </div>
+            </section>
+
+            <div class="estado-consulta">
+                <div class="barra-avance" aria-hidden="true">
+                    <span id="barra-avance"></span>
+                </div>
+                <p id="mensaje-ingresos" class="mensaje" aria-live="polite"></p>
+            </div>
+
+            <section class="contenedor-tabla" aria-label="Tabla de ingresos consultados">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cedula</th>
+                            <th>Rol</th>
+                            <th>Ingreso</th>
+                            <th>Salida</th>
+                            <th>Estado</th>
+                            <th>Area visita</th>
+                            <th>Observacion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-ingresos"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/reporte.js"></script>
+</body>
+</html>

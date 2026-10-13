@@ -1,0 +1,350 @@
+:root {
+    --bg-start: #f4f7fb;
+    --bg-end: #dbe7f5;
+    --card: #ffffff;
+    --text: #1d2a3a;
+    --muted: #5b6b7c;
+    --primary: #13d313;
+    --primary-hover: #3cff00;
+    --accent: #0f6abf;
+    --accent-hover: #0b579d;
+    --border: #c8d7e6;
+    --error: #b42318;
+    --ok: #067647;
+    --sidebar-bg: #ffffffec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    padding: 1rem;
+}
+
+.contenedor {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.barra-lateral {
+    min-height: 520px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-radius: 16px;
+    background: var(--sidebar-bg);
+    box-shadow: 0 18px 30px rgba(10, 30, 48, 0.2);
+}
+
+.titulo-barra::before {
+    content: "TrackID";
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.boton-lateral {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid rgba(29, 42, 58, 0.12);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    background: #111827;
+    color: #fff;
+    text-decoration: none;
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.boton-lateral:hover {
+    background: var(--primary);
+    color: #07120a;
+    transform: translateY(-1px);
+}
+
+.tarjeta {
+    width: 100%;
+    min-width: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 40px rgba(12, 41, 74, 0.12);
+}
+
+h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+p {
+    margin: 0 0 1.2rem;
+    color: var(--muted);
+}
+
+.contenedor-filtros {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.tarjeta > .contenedor-filtros:last-child {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.68);
+}
+
+.fila-filtros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+label {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent);
+    outline: 3px solid rgba(15, 106, 191, 0.18);
+}
+
+input[readonly] {
+    background: #f8fbff;
+}
+
+textarea {
+    min-height: 112px;
+    resize: vertical;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+button {
+    border: 0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    color: #07120a;
+}
+
+.btn-secondary {
+    background: #e9eef5;
+    color: var(--text);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #dbe7f5;
+}
+
+.message {
+    min-height: 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.error {
+    color: var(--error);
+}
+
+.ok {
+    color: var(--ok);
+}
+
+.wait {
+    color: var(--muted);
+}
+
+.contenedor-tabla {
+    width: 100%;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.tabla {
+    width: 100%;
+    min-width: 780px;
+    border-collapse: collapse;
+}
+
+.tabla thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid rgba(200, 215, 230, 0.9);
+    background: #f7faff;
+    color: var(--muted);
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.tabla tbody td {
+    padding: 0.85rem 0.9rem;
+    border-bottom: 1px solid rgba(200, 215, 230, 0.65);
+    vertical-align: top;
+    font-size: 0.95rem;
+}
+
+.tabla tbody tr:hover td {
+    background: #fbfdff;
+}
+
+.celda-acciones {
+    white-space: nowrap;
+}
+
+.btn-accion,
+.btn-salida {
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+    font-weight: 800;
+}
+
+.btn-salida {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-salida:hover {
+    background: var(--accent-hover);
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    .contenedor {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-lateral {
+        min-height: auto;
+    }
+
+    .boton-lateral {
+        min-height: 52px;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.98rem;
+    }
+
+    .titulo-barra::before {
+        text-align: center;
+    }
+}
+
+/* ===== Movil ===== */
+@media (max-width: 600px) {
+    body {
+        padding: 0.6rem;
+    }
+
+    .tarjeta {
+        padding: 1.1rem;
+        border-radius: 14px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    .actions button {
+        flex: 1 1 calc(50% - 0.4rem);
+        min-height: 46px;
+    }
+
+    .contenedor-tabla {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla thead th,
+    .tabla tbody td {
+        padding: 0.55rem 0.6rem;
+        font-size: 0.88rem;
+    }
+
+    .btn-accion,
+    .btn-salida {
+        padding: 0.5rem 0.65rem;
+        font-size: 0.85rem;
+    }
+}

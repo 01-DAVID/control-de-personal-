@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/perfiles.css">
+    <title>Creacion de perfiles</title>
+</head>
+<body>
+    <div class="contenedor">
+        <aside class="barra-lateral" aria-label="Menu lateral">
+            <h2 class="titulo-barra"></h2>
+            <button id="cerrar-sesion" type="button" class="boton-lateral">Cerrar sesion</button>
+            <a href="/admin" class="boton-lateral">Administrador</a>
+            <a href="/personal" class="boton-lateral">Informes </a>
+            <a href="/personal_inactivo" class="boton-lateral">Dar salida</a>
+            <a href="/personal_activo" class="boton-lateral">Actualizar Datos</a>
+        </aside>
+
+        <main class="tarjeta">
+            <header class="encabezado-vista">
+                <div>
+                    <h1>Creacion de perfiles</h1>
+                    <p>Crea perfiles de administrador o vigilante para el acceso al sistema.</p>
+                </div>
+            </header>
+
+            <section class="panel-edicion" aria-label="Formulario para crear perfiles">
+                <div class="panel-edicion__titulo">
+                    <h2>Datos del perfil</h2>
+                    <p>Uso administrativo.</p>
+                </div>
+
+                <form id="form-perfil" class="form-edicion" novalidate>
+                    <div id="mensaje-perfil" class="message" role="status" aria-live="polite"></div>
+                    <section class="fila">
+                        <div class="field">
+                            <label for="nombre">Nombre completo</label>
+                            <input id="nombre" name="nombre" type="text" placeholder="Ej: Maria Lopez" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="rol">Rol</label>
+                            <select id="rol" name="rol" required>
+                                <option value="">Selecciona una opcion</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="vigilante">Vigilante</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="contrasena">Contrasena</label>
+                            <input id="contrasena" name="contrasena" type="password" placeholder="Minimo 6 caracteres" required>
+                        </div>
+                    </section>
+
+                    <div class="field field-photo">
+                        <label for="fotoInput">Foto del usuario</label>
+                        <div id="userPhoto" class="capture-space" aria-label="Vista previa de la foto del usuario">
+                            <span id="fotoPlaceholder">Sin foto</span>
+                            <img id="fotoPreview" alt="Foto del usuario" hidden>
+                        </div>
+                        <div class="photo-actions">
+                            <button id="btnTomarFoto" class="btn-photo-primary" type="button">Tomar foto</button>
+                            <label class="btn-photo-secondary" for="fotoInput">Cargar imagen</label>
+                        </div>
+                        <div id="cameraPanel" class="camera-panel" hidden>
+                            <video id="cameraVideo" autoplay playsinline muted></video>
+                            <div class="photo-actions">
+                                <button id="btnCapturarFoto" class="btn-photo-primary" type="button">Capturar</button>
+                                <button id="btnCancelarCamara" class="btn-photo-secondary" type="button">Cancelar</button>
+                            </div>
+                        </div>
+                        <canvas id="fotoCanvas" hidden></canvas>
+                        <input id="fotoInput" class="foto-input" name="fotoInput" type="file" accept="image/*" capture="environment" >
+                        <small class="field-note">Puede tomar una foto o cargar una imagen.</small>
+                    </div>
+
+                    <div class="actions">
+                        <button id="btn-guardar-perfil" type="submit" class="btn-primary">Crear perfil</button>
+                        <button id="btn-limpiar-perfil" type="reset" class="btn-secondary">Limpiar pantalla</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/perfiles.js"></script>
+</body>
+</html>

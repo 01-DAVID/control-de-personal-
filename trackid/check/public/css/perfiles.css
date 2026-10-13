@@ -1,0 +1,358 @@
+:root {
+    --bg-start: #f4f7fb;
+    --bg-end: #dbe7f5;
+    --card: #ffffff;
+    --text: #1d2a3a;
+    --muted: #5b6b7c;
+    --primary: #13d313;
+    --primary-hover: #3cff00;
+    --accent: #0f6abf;
+    --accent-hover: #0b579d;
+    --border: #c8d7e6;
+    --error: #b42318;
+    --ok: #067647;
+    --sidebar-bg: #ffffffec;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    padding: 1rem;
+}
+
+.contenedor {
+    width: min(1280px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.barra-lateral {
+    min-height: 100%;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-radius: 16px;
+    background: var(--sidebar-bg);
+    box-shadow: 0 18px 30px rgba(10, 30, 48, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+.titulo-barra::before {
+    content: "TrackID";
+    display: block;
+    margin-bottom: 0.6rem;
+    color: var(--text);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.boton-lateral {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid rgba(29, 42, 58, 0.12);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    background: #111827;
+    color: #fff;
+    text-decoration: none;
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.boton-lateral:hover {
+    background: var(--primary);
+    color: #07120a;
+    transform: translateY(-1px);
+}
+
+.tarjeta {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem 1.6rem;
+    box-shadow: 0 20px 40px rgba(12, 41, 74, 0.12);
+}
+
+.encabezado-vista {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(200, 215, 230, 0.85);
+}
+
+.encabezado-vista h1 {
+    margin: 0 0 0.4rem;
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+}
+
+.encabezado-vista p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.pill {
+    align-self: center;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    background: #eef4fb;
+    color: var(--muted);
+}
+
+.pill-muted {
+    background: #eef4fb;
+    color: var(--muted);
+}
+
+.panel-edicion {
+    background: linear-gradient(135deg, #f8fbff, #f2f7fc);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+}
+
+.panel-edicion__titulo {
+    margin-bottom: 1rem;
+}
+
+.panel-edicion__titulo h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+}
+
+.panel-edicion__titulo p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.form-edicion {
+    display: grid;
+    gap: 1rem;
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.field {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.field label {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.72rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent);
+    outline: 3px solid rgba(15, 106, 191, 0.18);
+}
+
+.field-photo {
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(200, 215, 230, 0.85);
+}
+
+.capture-space {
+    min-height: 190px;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+.capture-space img,
+.camera-panel video {
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.camera-panel {
+    margin-top: 0.8rem;
+}
+
+.photo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 0.8rem;
+}
+
+.btn-photo-primary,
+.btn-photo-secondary,
+.btn-primary,
+.btn-secondary {
+    border: 0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font: inherit;
+}
+
+.btn-photo-primary,
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-photo-primary:hover,
+.btn-primary:hover {
+    background: var(--primary-hover);
+    color: #07120a;
+}
+
+.btn-photo-secondary,
+.btn-secondary {
+    background: #e9eef5;
+    color: var(--text);
+}
+
+.btn-photo-secondary:hover,
+.btn-secondary:hover {
+    background: #dbe7f5;
+}
+
+.field-note {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 0.3rem;
+}
+
+.message {
+    min-height: 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.error {
+    color: var(--error);
+}
+
+.ok {
+    color: var(--ok);
+}
+
+.wait {
+    color: var(--muted);
+}
+
+.foto-input {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .contenedor {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-lateral {
+        min-height: auto;
+    }
+
+    .fila {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Movil ===== */
+@media (max-width: 600px) {
+    body {
+        padding: 0.6rem;
+    }
+
+    .tarjeta,
+    .panel-edicion {
+        padding: 1.1rem;
+        border-radius: 14px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    .boton-lateral {
+        justify-content: center;
+        text-align: center;
+        font-size: 0.98rem;
+    }
+
+    .titulo-barra::before {
+        text-align: center;
+    }
+
+    .encabezado-vista {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .capture-space img,
+    .camera-panel video {
+        max-height: 240px;
+    }
+
+    .actions button {
+        flex: 1 1 calc(50% - 0.4rem);
+        min-height: 46px;
+    }
+}
